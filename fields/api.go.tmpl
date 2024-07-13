@@ -64,6 +64,8 @@ func (dst *{{ $k }}) UnmarshalJSON(b []byte) error {
 }
 {{ end }}
 
+{{- $apiVersion2 := or (eq .StructName "APGroup") (eq .StructName "DNSRecord") }}
+
 {{ if not .IsSetting }}
 func (c *Client) list{{ .StructName }}(ctx context.Context, site string) ([]{{ .StructName }}, error) {
 	var respBody struct {
@@ -71,7 +73,7 @@ func (c *Client) list{{ .StructName }}(ctx context.Context, site string) ([]{{ .
 		Data []{{ .StructName }} `json:"data"`
 	}
 
-	err := c.do(ctx, "GET", fmt.Sprintf("s/%s/{{ if eq .StructName "Device" }}stat/{{else if eq .StructName "APGroup" }}{{ else }}rest/{{ end }}{{ .ResourcePath }}", site), nil, &respBody)
+	err := c.do(ctx, "GET", fmt.Sprintf("s/%s/{{ if eq .StructName "Device" }}stat/{{ else if $apiVersion2 }}{{ else }}rest/{{ end }}{{ .ResourcePath }}", site), nil, &respBody)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +90,7 @@ func (c *Client) get{{ .StructName }}(ctx context.Context, site{{ if not .IsSett
 {{ if .IsSetting }}
 	err := c.do(ctx, "GET", fmt.Sprintf("s/%s/get/setting/{{ .ResourcePath }}", site), nil, &respBody)
 {{- else }}
-	err := c.do(ctx, "GET", fmt.Sprintf("s/%s/{{ if eq .StructName "Device" }}stat{{ else }}rest{{ end }}/{{ .ResourcePath }}/%s", site, id), nil, &respBody)
+	err := c.do(ctx, "GET", fmt.Sprintf("{{ if eq .StructName "DNSRecord" }}%s/site/%s/{{ .ResourcePath }}/%s", c.apiV2Path{{ else }}s/%s/{{ if eq .StructName "Device" }}stat/{{ else }}rest/{{ end }}{{ .ResourcePath }}/%s"{{ end }}, site, id), nil, &respBody)
 {{- end }}
 	if err != nil {
 		return nil, err
@@ -104,7 +106,7 @@ func (c *Client) get{{ .StructName }}(ctx context.Context, site{{ if not .IsSett
 
 {{ if not .IsSetting }}
 func (c *Client) delete{{ .StructName }}(ctx context.Context, site, id string) error {
-	err := c.do(ctx, "DELETE", fmt.Sprintf("s/%s/rest/{{ .ResourcePath }}/%s", site, id), struct{}{}, nil)
+	err := c.do(ctx, "DELETE", fmt.Sprintf("{{ if eq .StructName "DNSRecord" }}%s/site/%s/{{ .ResourcePath }}/%s", c.apiV2Path{{ else }}s/%s/rest/{{ .ResourcePath }}/%s"{{ end }}, site, id), struct{}{}, nil)
 	if err != nil {
 		return err
 	}
@@ -117,7 +119,7 @@ func (c *Client) create{{ .StructName }}(ctx context.Context, site string, d *{{
 		Data []{{ .StructName }} `json:"data"`
 	}
 
-	err := c.do(ctx, "POST", fmt.Sprintf("s/%s/rest/{{ .ResourcePath }}", site), d, &respBody)
+	err := c.do(ctx, "POST", fmt.Sprintf("{{ if eq .StructName "DNSRecord" }}%s/site/%s/{{ .ResourcePath }}", c.apiV2Path{{ else }}s/%s/rest/{{ .ResourcePath }}"{{ end }}, site), d, &respBody)
 	if err != nil {
 		return nil, err
 	}
@@ -141,7 +143,7 @@ func (c *Client) update{{ .StructName }}(ctx context.Context, site string, d *{{
 	d.Key = "{{ .ResourcePath }}"
 	err := c.do(ctx, "PUT", fmt.Sprintf("s/%s/set/setting/{{ .ResourcePath }}", site), d, &respBody)
 {{- else }}
-	err := c.do(ctx, "PUT", fmt.Sprintf("s/%s/rest/{{ .ResourcePath }}/%s", site, d.ID), d, &respBody)
+	err := c.do(ctx, "PUT", fmt.Sprintf("{{ if eq .StructName "DNSRecord" }}%s/site/%s/{{ .ResourcePath }}/%s", c.apiV2Path{{ else }}s/%s/rest/{{ .ResourcePath }}/%s"{{ end }}, site, d.ID), d, &respBody)
 {{- end }}
 	if err != nil {
 		return nil, err

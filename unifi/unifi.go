@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -114,7 +113,7 @@ func (c *Client) setAPIUrlStyle(ctx context.Context) error {
 		return err
 	}
 	defer resp.Body.Close()
-	_, _ = io.Copy(ioutil.Discard, resp.Body)
+	_, _ = io.Copy(io.Discard, resp.Body)
 
 	if resp.StatusCode == http.StatusOK {
 		// the new API returns a 200 for a / request

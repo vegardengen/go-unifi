@@ -1,0 +1,10 @@
+{
+  "enabled": "false|true",
+  "key": ".{1,128}",
+  "port": "[0-9]{1,8}",
+  "priority": ".{1,128}",
+  "record_type": "A|AAAA|CNAME|MX|NS|PTR|SOA|SRV|TXT",
+  "ttl": "[0-9]{1,10}",
+  "value": ".{1,256}",
+  "weight": "[0-9]{1,10}"
+}

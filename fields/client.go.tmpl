@@ -1,0 +1,51 @@
+{{- $structName := .StructName }}
+
+{{ define "field" }}
+	{{ .FieldName }} {{ if .IsArray }}[]{{end}}{{ .FieldType }} `json:"{{ .JSONName }}{{ if .OmitEmpty }},omitempty{{ end }}"` {{ if .FieldValidation }}// {{ .FieldValidation }}{{ end }} {{- end }}
+{{ define "field-customUnmarshalType" }}
+	{{- if eq .CustomUnmarshalType "" }}{{else}}
+			{{ .FieldName }} {{ if .IsArray }}[]{{end}}{{ .CustomUnmarshalType }} `json:"{{ .JSONName }}"`{{ end }} {{- end }}
+{{ define "typecast" }}
+	{{- if ne .CustomUnmarshalFunc "" }}
+		dst.{{ .FieldName }}= {{ .CustomUnmarshalFunc }}(aux.{{ .FieldName }})
+	{{- else if eq .CustomUnmarshalType "" }}{{else}}
+		{{- if .IsArray }}
+		dst.{{ .FieldName }}= make([]{{ .FieldType }}, len(aux.{{ .FieldName }}))
+		for i, v := range aux.{{ .FieldName }} {
+				dst.{{ .FieldName }}[i] = {{ .FieldType }}(v)
+		}
+		{{- else }}
+		dst.{{ .FieldName }} = {{ .FieldType }}(aux.{{ .FieldName }})
+		{{- end }}{{- end }}{{- end }}
+// Code generated from ace.jar fields *.json files
+// DO NOT EDIT.
+
+package unifi
+
+import (
+	"context"
+)
+
+{{ if not .IsSetting }}
+func (c *Client) List{{ .StructName }}(ctx context.Context, site string) ([]{{ .StructName }}, error) {
+  return c.list{{ .StructName }}(ctx, site)
+}
+{{- end }}
+
+func (c *Client) Get{{ .StructName }}(ctx context.Context, site{{ if not .IsSetting }}, id{{ end }} string) (*{{ .StructName }}, error) {
+  return c.get{{ .StructName }}(ctx, site{{ if not .IsSetting }}, id{{ end }})
+}
+
+{{ if not .IsSetting }}
+func (c *Client) Delete{{ .StructName }}(ctx context.Context, site, id string) error {
+  return c.delete{{ .StructName }}(ctx, site, id)
+}
+
+func (c *Client) Create{{ .StructName }}(ctx context.Context, site string, d *{{ .StructName }}) (*{{ .StructName }}, error) {
+  return c.create{{ .StructName }}(ctx, site, d)
+}
+{{- end }}
+
+func (c *Client) Update{{ .StructName }}(ctx context.Context, site string, d *{{ .StructName }}) (*{{ .StructName }}, error) {
+  return c.update{{ .StructName }}(ctx, site, d)
+}

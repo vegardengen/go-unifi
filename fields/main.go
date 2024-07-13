@@ -148,6 +148,8 @@ func NewResource(structName string, resourcePath string) *Resource {
 			// Removed in v7, retaining for backwards compatibility
 			baseType.Fields["MdnsEnabled"] = NewFieldInfo("MdnsEnabled", "mdns_enabled", "bool", "", false, false, "")
 		}
+	case resource.StructName == "DNSRecord":
+		resource.ResourcePath = "static-dns"
 	case resource.StructName == "Device":
 		baseType.Fields[" MAC"] = NewFieldInfo("MAC", "mac", "string", "", true, false, "")
 		baseType.Fields["Adopted"] = NewFieldInfo("Adopted", "adopted", "bool", "", false, false, "")
@@ -429,13 +431,29 @@ func main() {
 		}
 
 		var code string
-		if code, err = resource.generateCode(); err != nil {
+		if code, err = resource.generateCode(false); err != nil {
 			panic(err)
 		}
 
 		_ = os.Remove(filepath.Join(outDir, goFile))
 		if err := os.WriteFile(filepath.Join(outDir, goFile), ([]byte)(code), 0o644); err != nil {
 			panic(err)
+		}
+
+		implFile := strcase.ToSnake(structName) + ".go"
+		implFilePath := filepath.Join(outDir, implFile)
+
+		if _, err := os.Stat(implFilePath); err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				var implCode string
+				if implCode, err = resource.generateCode(true); err != nil {
+					panic(err)
+				}
+
+				if err := os.WriteFile(filepath.Join(implFilePath), ([]byte)(implCode), 0o644); err != nil {
+					panic(err)
+				}
+			}
 		}
 	}
 
@@ -583,12 +601,20 @@ func (r *Resource) processJSON(b []byte) error {
 //go:embed api.go.tmpl
 var apiGoTemplate string
 
-func (r *Resource) generateCode() (string, error) {
+//go:embed client.go.tmpl
+var clientGoTemplate string
+
+func (r *Resource) generateCode(isImpl bool) (string, error) {
 	var err error
 	var buf bytes.Buffer
 	writer := io.Writer(&buf)
 
-	tpl := template.Must(template.New("api.go.tmpl").Parse(apiGoTemplate))
+	var tpl *template.Template
+	if isImpl {
+		tpl = template.Must(template.New("client.go.tmpl").Parse(clientGoTemplate))
+	} else {
+		tpl = template.Must(template.New("api.go.tmpl").Parse(apiGoTemplate))
+	}
 
 	err = tpl.Execute(writer, r)
 	if err != nil {
