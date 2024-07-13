@@ -64,7 +64,7 @@ func (c *Client) listDNSRecord(ctx context.Context, site string) ([]DNSRecord, e
 		Data []DNSRecord `json:"data"`
 	}
 
-	err := c.do(ctx, "GET", fmt.Sprintf("s/%s/static-dns", site), nil, &respBody)
+	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/static-dns", c.apiV2Path, site), nil, &respBody)
 	if err != nil {
 		return nil, err
 	}
