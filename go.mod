@@ -1,4 +1,4 @@
-module github.com/paultyng/go-unifi
+module github.com/ubiquiti-community/go-unifi
 
 go 1.21
 
