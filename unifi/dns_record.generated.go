@@ -28,7 +28,7 @@ type DNSRecord struct {
 	Enabled    bool   `json:"enabled"`
 	Key        string `json:"key,omitempty"` // .{1,128}
 	Port       int    `json:"port,omitempty"`
-	Priority   string `json:"priority,omitempty"`    // .{1,128}
+	Priority   int `json:"priority,omitempty"`    // .{1,128}
 	RecordType string `json:"record_type,omitempty"` // A|AAAA|CNAME|MX|NS|PTR|SOA|SRV|TXT
 	Ttl        int    `json:"ttl,omitempty"`
 	Value      string `json:"value,omitempty"` // .{1,256}
@@ -59,17 +59,14 @@ func (dst *DNSRecord) UnmarshalJSON(b []byte) error {
 }
 
 func (c *Client) listDNSRecord(ctx context.Context, site string) ([]DNSRecord, error) {
-	var respBody struct {
-		Meta meta        `json:"meta"`
-		Data []DNSRecord `json:"data"`
-	}
+	var respBody []DNSRecord
 
 	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/static-dns", c.apiV2Path, site), nil, &respBody)
 	if err != nil {
 		return nil, err
 	}
 
-	return respBody.Data, nil
+	return respBody, nil
 }
 
 func (c *Client) getDNSRecord(ctx context.Context, site, id string) (*DNSRecord, error) {

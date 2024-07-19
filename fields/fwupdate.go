@@ -74,7 +74,7 @@ func (l *firmwareUpdateApiResponseEmbeddedFirmwareDataLink) UnmarshalJSON(j []by
 }
 
 type firmwareUpdateApiResponseEmbeddedFirmwareLinks struct {
-	Data firmwareUpdateApiResponseEmbeddedFirmwareDataLink `json:"data"`
+	Data firmwareUpdateApiResponseEmbeddedFirmwareDataLink `json:"data,omitempty"`
 }
 
 func firmwareUpdateApiFilter(key, value string) string {
