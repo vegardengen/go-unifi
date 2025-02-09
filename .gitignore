@@ -4,3 +4,4 @@
 # goreleaser
 /dist/
 provider
+.DS_Store
