@@ -119,8 +119,8 @@ type ActiveClient struct {
 
 type ActiveClients []ActiveClient
 
-func (c *Client) ListActiveClients(ctx context.Context, site string) ([]APGroup, error) {
-	var respBody []APGroup
+func (c *Client) ListActiveClients(ctx context.Context, site string) (ActiveClients, error) {
+	var respBody []ActiveClient
 
 	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/clients/active?includeUnifiDevices=true", c.apiV2Path, site), nil, &respBody)
 	if err != nil {
