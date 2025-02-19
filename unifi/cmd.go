@@ -22,7 +22,7 @@ type Cmd struct {
 func (c *Client) ExecuteCmd(ctx context.Context, site string, mgr string, cmd Cmd) (any, error) {
 	var respBody struct{}
 
-	err := c.do(ctx, "POST", fmt.Sprintf("%s/site/%s/cmd/%s", c.apiV2Path, site, mgr), &cmd, &respBody)
+	err := c.do(ctx, "POST", fmt.Sprintf("%s/s/%s/cmd/%s", c.apiPath, site, mgr), &cmd, &respBody)
 	if err != nil {
 		return nil, err
 	}
