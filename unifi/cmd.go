@@ -12,6 +12,7 @@ var (
 )
 
 type Cmd struct {
+	Command  string `json:"cmd"`
 	MAC      string `json:"mac,omitempty"`
 	PortIDX  *int   `json:"port_idx,omitempty"`
 	FileName string `json:"filename,omitempty"`
