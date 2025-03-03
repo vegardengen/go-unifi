@@ -44,6 +44,7 @@ type ActiveClient struct {
 	Ccq                                 int             `json:"ccq,omitempty"`
 	Channel                             int             `json:"channel,omitempty"`
 	ChannelWidth                        string          `json:"channel_width,omitempty"`
+	DetailedStates                      DetailedStates  `json:"detailed_states,omitempty"`
 	DhcpendTime                         int             `json:"dhcpend_time,omitempty"`
 	DisplayName                         string          `json:"display_name,omitempty"`
 	Essid                               string          `json:"essid,omitempty"`
@@ -62,6 +63,10 @@ type ActiveClient struct {
 	IsGuest                             bool            `json:"is_guest,omitempty"`
 	IsMlo                               bool            `json:"is_mlo,omitempty"`
 	IsWired                             bool            `json:"is_wired,omitempty"`
+	LastConnectionNetworkID             string          `json:"last_connection_network_id,omitempty"`
+	LastConnectionNetworkName           string          `json:"last_connection_network_name,omitempty"`
+	LastIP                              string          `json:"last_ip,omitempty"`
+	LastIpv6                            []string        `json:"last_ipv6,omitempty"`
 	LastRadio                           string          `json:"last_radio,omitempty"`
 	LastSeen                            int             `json:"last_seen,omitempty"`
 	LastUplinkMac                       string          `json:"last_uplink_mac,omitempty"`
@@ -91,6 +96,7 @@ type ActiveClient struct {
 	Signal                              int             `json:"signal,omitempty"`
 	SiteID                              string          `json:"site_id,omitempty"`
 	Status                              string          `json:"status,omitempty"`
+	SwPort                              int             `json:"sw_port,omitempty"`
 	Tags                                []string        `json:"tags,omitempty"`
 	TxBytes                             int             `json:"tx_bytes,omitempty"`
 	TxBytesR                            int             `json:"tx_bytes-r,omitempty"`
@@ -99,29 +105,26 @@ type ActiveClient struct {
 	TxRate                              int             `json:"tx_rate,omitempty"`
 	Type                                string          `json:"type,omitempty"`
 	UnifiDevice                         bool            `json:"unifi_device,omitempty"`
+	UnifiDeviceInfo                     UnifiDeviceInfo `json:"unifi_device_info,omitempty"`
 	UplinkMac                           string          `json:"uplink_mac,omitempty"`
 	Uptime                              int             `json:"uptime,omitempty"`
 	UseFixedip                          bool            `json:"use_fixedip,omitempty"`
-	UserID                              string          `json:"user_id,omitempty"`
 	UsergroupID                         string          `json:"usergroup_id,omitempty"`
+	UserID                              string          `json:"user_id,omitempty"`
 	VirtualNetworkOverrideEnabled       bool            `json:"virtual_network_override_enabled,omitempty"`
 	VirtualNetworkOverrideID            string          `json:"virtual_network_override_id,omitempty"`
 	WifiExperienceAverage               int             `json:"wifi_experience_average,omitempty"`
 	WifiExperienceScore                 int             `json:"wifi_experience_score,omitempty"`
 	WifiTxAttempts                      int             `json:"wifi_tx_attempts,omitempty"`
 	WifiTxRetriesPercentage             float64         `json:"wifi_tx_retries_percentage,omitempty"`
-	WlanconfID                          string          `json:"wlanconf_id,omitempty"`
-	UnifiDeviceInfo                     UnifiDeviceInfo `json:"unifi_device_info,omitempty"`
-	DetailedStates                      DetailedStates  `json:"detailed_states,omitempty"`
-	SwPort                              int             `json:"sw_port,omitempty"`
 	WiredRateMbps                       int             `json:"wired_rate_mbps,omitempty"`
-	LastIpv6                            []string        `json:"last_ipv6,omitempty"`
+	WlanconfID                          string          `json:"wlanconf_id,omitempty"`
 }
 
-type ActiveClients []ActiveClient
+type ClientList []Client
 
-func (c *Client) ListActiveClients(ctx context.Context, site string) (ActiveClients, error) {
-	var respBody []ActiveClient
+func (c *Client) ListClientsActive(ctx context.Context, site string) (ClientList, error) {
+	var respBody []Client
 
 	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/clients/active?includeUnifiDevices=true", c.apiV2Path, site), nil, &respBody)
 	if err != nil {
@@ -129,4 +132,15 @@ func (c *Client) ListActiveClients(ctx context.Context, site string) (ActiveClie
 	}
 
 	return respBody, nil
+}
+
+func (c *Client) GetClientLocal(ctx context.Context, site string, mac string) (*Client, error) {
+	var respBody Client
+
+	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/clients/local/%s?includeUnifiDevices=true&includeUnifiDevices=true", c.apiV2Path, site, mac), nil, &respBody)
+	if err != nil {
+		return nil, err
+	}
+
+	return &respBody, nil
 }
