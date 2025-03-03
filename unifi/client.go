@@ -34,7 +34,7 @@ type DetailedStates struct {
 	UplinkNearPowerLimit bool `json:"uplink_near_power_limit,omitempty"`
 }
 
-type ActiveClient struct {
+type ClientInfo struct {
 	Anomalies                           int             `json:"anomalies,omitempty"`
 	ApMac                               string          `json:"ap_mac,omitempty"`
 	AssocTime                           int             `json:"assoc_time,omitempty"`
@@ -121,10 +121,10 @@ type ActiveClient struct {
 	WlanconfID                          string          `json:"wlanconf_id,omitempty"`
 }
 
-type ClientList []Client
+type ClientList []ClientInfo
 
 func (c *Client) ListClientsActive(ctx context.Context, site string) (ClientList, error) {
-	var respBody []Client
+	var respBody []ClientInfo
 
 	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/clients/active?includeUnifiDevices=true", c.apiV2Path, site), nil, &respBody)
 	if err != nil {
@@ -134,8 +134,8 @@ func (c *Client) ListClientsActive(ctx context.Context, site string) (ClientList
 	return respBody, nil
 }
 
-func (c *Client) GetClientLocal(ctx context.Context, site string, mac string) (*Client, error) {
-	var respBody Client
+func (c *Client) GetClientLocal(ctx context.Context, site string, mac string) (*ClientInfo, error) {
+	var respBody ClientInfo
 
 	err := c.do(ctx, "GET", fmt.Sprintf("%s/site/%s/clients/local/%s?includeUnifiDevices=true&includeUnifiDevices=true", c.apiV2Path, site, mac), nil, &respBody)
 	if err != nil {
