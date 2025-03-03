@@ -301,7 +301,6 @@ type Rps struct {
 	RpsPortTable        []RpsPortTable `json:"rps_port_table,omitempty"`
 }
 type DeviceV2 struct {
-	*Device
 	PortTable                           []PortTable     `json:"port_table,omitempty"`
 	RequiredVersion                     string          `json:"required_version,omitempty"`
 	LicenseState                        string          `json:"license_state,omitempty"`
