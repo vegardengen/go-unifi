@@ -18,6 +18,7 @@ type Fingerprint struct {
 	DevCat         int  `json:"dev_cat,omitempty"`
 	DevFamily      int  `json:"dev_family,omitempty"`
 	DevID          int  `json:"dev_id,omitempty"`
+	DevIDOverride  int  `json:"dev_id_override,omitempty"`
 	DevVendor      int  `json:"dev_vendor,omitempty"`
 	HasOverride    bool `json:"has_override,omitempty"`
 	OsName         int  `json:"os_name,omitempty"`
