@@ -151,7 +151,7 @@ func TestResourceTypes(t *testing.T) {
 
 		err := resource.processJSON(([]byte)(testData))
 
-		assert.Empty(t, err, "No error processing JSON")
+		assert.NoError(t, err, "No error processing JSON")
 		assert.Equal(t, expectation.StructName, resource.StructName)
 		assert.Equal(t, expectation.ResourcePath, resource.ResourcePath)
 		assert.Equal(t, expectation.Types, resource.Types)

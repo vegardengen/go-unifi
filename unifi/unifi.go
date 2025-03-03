@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -183,7 +184,7 @@ func (c *Client) Login(ctx context.Context, user, pass string) error {
 	c.version = si.Version
 
 	if c.version == "" {
-		return fmt.Errorf("unable to determine controller version")
+		return errors.New("unable to determine controller version")
 	}
 
 	return nil
@@ -225,7 +226,7 @@ func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody int
 	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 
 	if c.csrf != "" {
-		req.Header.Set("X-CSRF-Token", c.csrf)
+		req.Header.Set("X-Csrf-Token", c.csrf)
 	}
 
 	resp, err := c.c.Do(req)
@@ -238,8 +239,8 @@ func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody int
 		return &NotFoundError{}
 	}
 
-	if csrf := resp.Header.Get("x-csrf-token"); csrf != "" {
-		c.csrf = resp.Header.Get("x-csrf-token")
+	if csrf := resp.Header.Get("X-Csrf-Token"); csrf != "" {
+		c.csrf = resp.Header.Get("X-Csrf-Token")
 	}
 
 	if resp.StatusCode != http.StatusOK {
