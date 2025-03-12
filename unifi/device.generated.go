@@ -104,6 +104,8 @@ type Device struct {
 	X                           float64                           `json:"x,omitempty"`
 	XBaresipPassword            string                            `json:"x_baresip_password,omitempty"` // ^[a-zA-Z0-9_.\-!~*'()]*
 	Y                           float64                           `json:"y,omitempty"`
+
+	PortTable []PortTable `json:"port_table,omitempty"`
 }
 
 func (dst *Device) UnmarshalJSON(b []byte) error {
@@ -310,6 +312,8 @@ type DevicePortOverrides struct {
 	StpPortMode                  bool             `json:"stp_port_mode,omitempty"`
 	TaggedVLANMgmt               string           `json:"tagged_vlan_mgmt,omitempty"` // auto|block_all|custom
 	VoiceNetworkID               string           `json:"voice_networkconf_id,omitempty"`
+	
+	PortPoe *bool `json:"port_poe,omitempty"`
 }
 
 func (dst *DevicePortOverrides) UnmarshalJSON(b []byte) error {
