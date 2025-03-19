@@ -132,7 +132,7 @@ type Network struct {
 	InterfaceMtuEnabled                           bool                            `json:"interface_mtu_enabled"`
 	InternetAccessEnabled                         bool                            `json:"internet_access_enabled"`
 	IsNAT                                         bool                            `json:"is_nat"`
-	L2TpAllowWeakCiphers                          bool                            `json:"l2tp_allow_weak_ciphers"`
+	L4TpAllowWeakCiphers                          bool                            `json:"l2tp_allow_weak_ciphers"`
 	L2TpInterface                                 string                          `json:"l2tp_interface,omitempty"`    // wan|wan2
 	L2TpLocalWANIP                                string                          `json:"l2tp_local_wan_ip,omitempty"` // ^any$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$
 	LocalPort                                     int                             `json:"local_port,omitempty"`        // ^([1-9][0-9]{0,3}|[1-5][0-9]{4}|[6][0-4][0-9]{3}|[6][5][0-4][0-9]{2}|[6][5][5][0-2][0-9]|[6][5][5][3][0-5])$
