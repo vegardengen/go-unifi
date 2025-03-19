@@ -126,7 +126,7 @@ type Network struct {
 	IPV6SettingPreference                         string                          `json:"ipv6_setting_preference,omitempty"`    // auto|manual
 	IPV6SingleNetworkInterface                    string                          `json:"ipv6_single_network_interface,omitempty"`
 	IPV6Subnet                                    string                          `json:"ipv6_subnet,omitempty"`
-	IPV6Subnets                                   []string                         json:"ipv6_subnets,omitempty"`
+	IPV6Subnets                                   []string                        `json:"ipv6_subnets,omitempty"`
 	IPV6WANDelegationType                         string                          `json:"ipv6_wan_delegation_type,omitempty"` // pd|single_network|none
 	InterfaceMtu                                  int                             `json:"interface_mtu,omitempty"`            // ^(6[89]|[7-9][0-9]|[1-9][0-9]{2,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|65500)$
 	InterfaceMtuEnabled                           bool                            `json:"interface_mtu_enabled"`
