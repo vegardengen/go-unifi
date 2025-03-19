@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/tj/assert"
-	"github.com/ubiquiti-community/go-unifi/unifi"
+	"github.com/vegardengen/go-unifi/unifi"
 )
 
 func TestAccountMarshalJSON(t *testing.T) {
