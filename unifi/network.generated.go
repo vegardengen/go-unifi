@@ -422,7 +422,7 @@ func (c *Client) listNetwork(ctx context.Context, site string) ([]Network, error
 	if err != nil {
 		return nil, err
 	}
-
+        fmt.Printf("%+v",respBody.Data)
 	return respBody.Data, nil
 }
 
