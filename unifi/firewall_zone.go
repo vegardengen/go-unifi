@@ -36,7 +36,7 @@ func (c *Client) ListFirewallZones(ctx context.Context, site string) ([]Firewall
 }
 
 func (c *Client) GetFirewallZone(ctx context.Context, site, id string) (*Site, error) {
-	firewallzones, err := c.ListFirewallZones(ctx)
+	firewallzones, err := c.ListFirewallZones(ctx, site)
 	if err != nil {
 		return nil, err
 	}
