@@ -212,6 +212,9 @@ func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody int
 	if err != nil {
 		return fmt.Errorf("unable to parse URL: %s %s %w", method, relativeURL, err)
 	}
+	if !strings.Contains(relativeURL, "firewall/zone") {
+		c.apiPath = c.apiV2Path
+	}
 	if !strings.HasPrefix(relativeURL, "/") && !reqURL.IsAbs() {
 		reqURL.Path = path.Join(c.apiPath, reqURL.Path)
 	}
