@@ -22,17 +22,15 @@ type FirewallZone struct {
 }
 
 func (c *Client) ListFirewallZones(ctx context.Context, site string) ([]FirewallZone, error) {
-	var respBody struct {
-		Meta meta           `json:"meta"`
-		Data []FirewallZone `json:"data"`
-	}
+	var respBody []FirewallZone
+
 
 	err := c.do(ctx, "GET", fmt.Sprintf("site/%s/firewall/zone", site), nil, &respBody)
 	if err != nil {
 		return nil, err
 	}
 
-	return respBody.Data, nil
+	return respBody, nil
 }
 
 func (c *Client) GetFirewallZone(ctx context.Context, site, id string) (*FirewallZone, error) {
