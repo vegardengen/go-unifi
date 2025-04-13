@@ -21,7 +21,7 @@ type FirewallZone struct {
 	// Role string `json:"role"`
 }
 
-func (c *Client) ListFirewallZones(ctx context.Context) ([]FirewallZone, error) {
+func (c *Client) ListFirewallZones(ctx context.Context, site string) ([]FirewallZone, error) {
 	var respBody struct {
 		Meta meta           `json:"meta"`
 		Data []FirewallZone `json:"data"`
@@ -35,7 +35,7 @@ func (c *Client) ListFirewallZones(ctx context.Context) ([]FirewallZone, error) 
 	return respBody.Data, nil
 }
 
-func (c *Client) GetFirewallZone(ctx context.Context, id string) (*Site, error) {
+func (c *Client) GetFirewallZone(ctx context.Context, site, id string) (*Site, error) {
 	firewallzones, err := c.ListFirewallZones(ctx)
 	if err != nil {
 		return nil, err
