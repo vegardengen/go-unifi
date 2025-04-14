@@ -191,9 +191,21 @@ func (c *Client) Login(ctx context.Context, user, pass string) error {
 }
 
 func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody any, respBody any) error {
+	return c.do_versioned(ctx, "V1", method, relativeURL, reqBody, respBody)
+}
+
+func (c *Client) do_versioned(ctx context.Context, version, method, relativeURL string, reqBody any, respBody any) error {
 	// single threading requests, this is mostly to assist in CSRF token propagation
 	c.Lock()
 	defer c.Unlock()
+
+	var apiPath string
+
+	if version == "V2" {
+		apiPath = c.apiV2Path
+	} else {
+		apiPath = c.apiPath
+	}
 
 	var (
 		reqReader io.Reader
@@ -213,7 +225,7 @@ func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody any
 		return fmt.Errorf("unable to parse URL: %s %s %w", method, relativeURL, err)
 	}
 	if !strings.HasPrefix(relativeURL, "/") && !reqURL.IsAbs() {
-		reqURL.Path = path.Join(c.apiPath, reqURL.Path)
+		reqURL.Path = path.Join(apiPath, reqURL.Path)
 	}
 
 	url := c.baseURL.ResolveReference(reqURL)
