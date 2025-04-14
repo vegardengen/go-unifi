@@ -13,6 +13,7 @@ import (
 	"path"
 	"strings"
 	"sync"
+	"log"
 )
 
 const (
@@ -273,7 +274,9 @@ func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody int
 	}
 
 	// TODO: check rc in addition to status code?
-
+       
+	log.Printf("%+v", respBody)
+	log.Printf("%+v", resp.Body)
 	err = json.NewDecoder(resp.Body).Decode(respBody)
 	if err != nil {
 		return fmt.Errorf("unable to decode body: %s %s %w", method, relativeURL, err)
