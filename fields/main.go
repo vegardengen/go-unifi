@@ -482,7 +482,7 @@ func (r *Resource) IsSetting() bool {
 	return strings.HasPrefix(r.StructName, "Setting")
 }
 
-func (r *Resource) processFields(fields map[string]interface{}) {
+func (r *Resource) processFields(fields map[string]any) {
 	t := r.Types[r.StructName]
 	for name, validation := range fields {
 		fieldInfo, err := r.fieldInfoFromValidation(name, validation)
@@ -494,7 +494,7 @@ func (r *Resource) processFields(fields map[string]interface{}) {
 	}
 }
 
-func (r *Resource) fieldInfoFromValidation(name string, validation interface{}) (*FieldInfo, error) {
+func (r *Resource) fieldInfoFromValidation(name string, validation any) (*FieldInfo, error) {
 	fieldName := strcase.ToCamel(name)
 	fieldName = cleanName(fieldName, fieldReps)
 
@@ -502,7 +502,7 @@ func (r *Resource) fieldInfoFromValidation(name string, validation interface{}) 
 	var fieldInfo *FieldInfo
 
 	switch validation := validation.(type) {
-	case []interface{}:
+	case []any:
 		if len(validation) == 0 {
 			fieldInfo = NewFieldInfo(fieldName, name, "string", "", false, true, "")
 			err := r.FieldProcessor(fieldName, fieldInfo)
@@ -523,7 +523,7 @@ func (r *Resource) fieldInfoFromValidation(name string, validation interface{}) 
 		err = r.FieldProcessor(fieldName, fieldInfo)
 		return fieldInfo, err
 
-	case map[string]interface{}:
+	case map[string]any:
 		typeName := r.StructName + fieldName
 
 		result := NewFieldInfo(fieldName, name, typeName, "", true, false, "")
@@ -587,7 +587,7 @@ func (r *Resource) fieldInfoFromValidation(name string, validation interface{}) 
 }
 
 func (r *Resource) processJSON(b []byte) error {
-	var fields map[string]interface{}
+	var fields map[string]any
 	err := json.Unmarshal(b, &fields)
 	if err != nil {
 		return err

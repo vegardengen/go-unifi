@@ -12,7 +12,7 @@ type Setting struct {
 	Key    string `json:"key"`
 }
 
-func (s *Setting) newFields() (interface{}, error) {
+func (s *Setting) newFields() (any, error) {
 	switch s.Key {
 	case "auto_speedtest":
 		return &SettingAutoSpeedtest{}, nil
@@ -79,7 +79,7 @@ func (s *Setting) newFields() (interface{}, error) {
 	return nil, fmt.Errorf("unexpected key %q", s.Key)
 }
 
-func (c *Client) GetSetting(ctx context.Context, site, key string) (*Setting, interface{}, error) {
+func (c *Client) GetSetting(ctx context.Context, site, key string) (*Setting, any, error) {
 	var respBody struct {
 		Meta meta              `json:"meta"`
 		Data []json.RawMessage `json:"data"`

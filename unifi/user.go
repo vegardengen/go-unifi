@@ -71,8 +71,8 @@ func (c *Client) CreateUser(ctx context.Context, site string, d *User) (*User, e
 	return &user, nil
 }
 
-func (c *Client) stamgr(ctx context.Context, site, cmd string, data map[string]interface{}) ([]User, error) {
-	reqBody := map[string]interface{}{}
+func (c *Client) stamgr(ctx context.Context, site, cmd string, data map[string]any) ([]User, error) {
+	reqBody := map[string]any{}
 
 	for k, v := range data {
 		reqBody[k] = v
@@ -94,7 +94,7 @@ func (c *Client) stamgr(ctx context.Context, site, cmd string, data map[string]i
 }
 
 func (c *Client) BlockUserByMAC(ctx context.Context, site, mac string) error {
-	users, err := c.stamgr(ctx, site, "block-sta", map[string]interface{}{
+	users, err := c.stamgr(ctx, site, "block-sta", map[string]any{
 		"mac": mac,
 	})
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *Client) BlockUserByMAC(ctx context.Context, site, mac string) error {
 }
 
 func (c *Client) UnblockUserByMAC(ctx context.Context, site, mac string) error {
-	users, err := c.stamgr(ctx, site, "unblock-sta", map[string]interface{}{
+	users, err := c.stamgr(ctx, site, "unblock-sta", map[string]any{
 		"mac": mac,
 	})
 	if err != nil {
@@ -120,7 +120,7 @@ func (c *Client) UnblockUserByMAC(ctx context.Context, site, mac string) error {
 }
 
 func (c *Client) DeleteUserByMAC(ctx context.Context, site, mac string) error {
-	users, err := c.stamgr(ctx, site, "forget-sta", map[string]interface{}{
+	users, err := c.stamgr(ctx, site, "forget-sta", map[string]any{
 		"macs": []string{mac},
 	})
 	if err != nil {
@@ -133,7 +133,7 @@ func (c *Client) DeleteUserByMAC(ctx context.Context, site, mac string) error {
 }
 
 func (c *Client) KickUserByMAC(ctx context.Context, site, mac string) error {
-	users, err := c.stamgr(ctx, site, "kick-sta", map[string]interface{}{
+	users, err := c.stamgr(ctx, site, "kick-sta", map[string]any{
 		"mac": mac,
 	})
 	if err != nil {
@@ -146,7 +146,7 @@ func (c *Client) KickUserByMAC(ctx context.Context, site, mac string) error {
 }
 
 func (c *Client) OverrideUserFingerprint(ctx context.Context, site, mac string, devIdOveride int) error {
-	reqBody := map[string]interface{}{
+	reqBody := map[string]any{
 		"mac":             mac,
 		"dev_id_override": devIdOveride,
 		"search_query":    "",

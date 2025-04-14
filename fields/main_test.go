@@ -12,7 +12,7 @@ func TestFieldInfoFromValidation(t *testing.T) {
 		expectedType      string
 		expectedComment   string
 		expectedOmitEmpty bool
-		validation        interface{}
+		validation        any
 	}{
 		{"string", "", true, ""},
 		{"string", "default|custom", true, "default|custom"},

@@ -139,7 +139,7 @@ func extractJSON(jarFile, fieldsDir string) error {
 		return fmt.Errorf("unable to open settings file: %w", err)
 	}
 
-	var settings map[string]interface{}
+	var settings map[string]any
 	err = json.Unmarshal(settingsData, &settings)
 	if err != nil {
 		return fmt.Errorf("unable to unmarshal settings: %w", err)

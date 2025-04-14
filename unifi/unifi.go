@@ -190,7 +190,7 @@ func (c *Client) Login(ctx context.Context, user, pass string) error {
 	return nil
 }
 
-func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody interface{}, respBody interface{}) error {
+func (c *Client) do(ctx context.Context, method, relativeURL string, reqBody any, respBody any) error {
 	// single threading requests, this is mostly to assist in CSRF token propagation
 	c.Lock()
 	defer c.Unlock()

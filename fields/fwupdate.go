@@ -54,7 +54,7 @@ func (l firmwareUpdateApiResponseEmbeddedFirmwareDataLink) MarshalJSON() ([]byte
 }
 
 func (l *firmwareUpdateApiResponseEmbeddedFirmwareDataLink) UnmarshalJSON(j []byte) error {
-	var m map[string]interface{}
+	var m map[string]any
 
 	err := json.Unmarshal(j, &m)
 	if err != nil {
