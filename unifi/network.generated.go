@@ -75,15 +75,18 @@ type Network struct {
 	DomainName                                    string                          `json:"domain_name"` // (?=^.{3,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)|^$|[a-zA-Z0-9-]{1,63}
 	Enabled                                       bool                            `json:"enabled"`
 	ExposedToSiteVPN                              bool                            `json:"exposed_to_site_vpn"`
+	FirewallZoneID                                string                          `json:"firewall_zone_id"`
 	GatewayDevice                                 string                          `json:"gateway_device"`         // (^$|^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$)
 	GatewayType                                   string                          `json:"gateway_type,omitempty"` // default|switch
 	IGMPFastleave                                 bool                            `json:"igmp_fastleave"`
+	IGMPForwardUnknownMulticast                   bool                            `json:"igmp_forward_unknown_multicast"`
 	IGMPGroupmembership                           int                             `json:"igmp_groupmembership,omitempty"` // [2-9]|[1-9][0-9]{1,2}|[1-2][0-9]{3}|3[0-5][0-9]{2}|3600|^$
 	IGMPMaxresponse                               int                             `json:"igmp_maxresponse,omitempty"`     // [1-9]|1[0-9]|2[0-5]|^$
 	IGMPMcrtrexpiretime                           int                             `json:"igmp_mcrtrexpiretime,omitempty"` // [0-9]|[1-9][0-9]{1,2}|[1-2][0-9]{3}|3[0-5][0-9]{2}|3600|^$
-	IGMPProxyDownstream                           bool                            `json:"igmp_proxy_downstream"`
+	IGMPProxyDownstreamNetworkIDs                 []string                        `json:"igmp_proxy_downstream_networkconf_ids,omitempty"`
+	IGMPProxyFor                                  string                          `json:"igmp_proxy_for,omitempty"` // all|some|none
 	IGMPProxyUpstream                             bool                            `json:"igmp_proxy_upstream"`
-	IGMPQuerier                                   string                          `json:"igmp_querier"` // ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^$
+	IGMPQuerierSwitches                           []NetworkIGMPQuerierSwitches    `json:"igmp_querier_switches,omitempty"`
 	IGMPSnooping                                  bool                            `json:"igmp_snooping"`
 	IGMPSupression                                bool                            `json:"igmp_supression"`
 	IPSecDhGroup                                  int                             `json:"ipsec_dh_group,omitempty"` // 2|5|14|15|16|19|20|21|25|26
@@ -92,7 +95,7 @@ type Network struct {
 	IPSecEspDhGroup                               int                             `json:"ipsec_esp_dh_group,omitempty"`   // 1|2|5|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32
 	IPSecEspEncryption                            string                          `json:"ipsec_esp_encryption,omitempty"` // aes128|aes192|aes256|3des
 	IPSecEspHash                                  string                          `json:"ipsec_esp_hash,omitempty"`       // sha1|md5|sha256|sha384|sha512
-	IPSecEspLifetime                              emptyStringInt                  `json:"ipsec_esp_lifetime,omitempty"`   // ^(?:3[0-9]|[4-9][0-9]|[1-9][0-9]{2,3}|[1-7][0-9]{4}|8[0-5][0-9]{3}|86[0-3][0-9]{2}|86400)$
+	IPSecEspLifetime                              string                          `json:"ipsec_esp_lifetime,omitempty"`   // ^(?:3[0-9]|[4-9][0-9]|[1-9][0-9]{2,3}|[1-7][0-9]{4}|8[0-5][0-9]{3}|86[0-3][0-9]{2}|86400)$
 	IPSecHash                                     string                          `json:"ipsec_hash,omitempty"`           // sha1|md5|sha256|sha384|sha512
 	IPSecIkeDhGroup                               int                             `json:"ipsec_ike_dh_group,omitempty"`   // 1|2|5|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31|32
 	IPSecIkeEncryption                            string                          `json:"ipsec_ike_encryption,omitempty"` // aes128|aes192|aes256|3des
@@ -168,7 +171,8 @@ type Network struct {
 	RemoteVPNSubnets                              []string                        `json:"remote_vpn_subnets,omitempty"` // ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/([1-9]|[1-2][0-9]|3[0-2])$|^$
 	ReportWANEvent                                bool                            `json:"report_wan_event"`
 	RequireMschapv2                               bool                            `json:"require_mschapv2"`
-	RouteDistance                                 int                             `json:"route_distance,omitempty"`     // ^[1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]$|^$
+	RouteDistance                                 int                             `json:"route_distance,omitempty"` // ^[1-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]$|^$
+	SdwanRemoteSiteID                             string                          `json:"sdwan_remote_site_id"`
 	SettingPreference                             string                          `json:"setting_preference,omitempty"` // auto|manual
 	SingleNetworkLan                              string                          `json:"single_network_lan,omitempty"`
 	UidPolicyEnabled                              bool                            `json:"uid_policy_enabled"`
@@ -192,7 +196,7 @@ type Network struct {
 	VPNClientDefaultRoute                         bool                            `json:"vpn_client_default_route"`
 	VPNClientPullDNS                              bool                            `json:"vpn_client_pull_dns"`
 	VPNProtocol                                   string                          `json:"vpn_protocol,omitempty"`       // TCP|UDP
-	VPNType                                       string                          `json:"vpn_type,omitempty"`           // auto|ipsec-vpn|openvpn-client|openvpn-server|openvpn-vpn|pptp-client|l2tp-server|pptp-server|uid-server|wireguard-server|wireguard-client
+	VPNType                                       string                          `json:"vpn_type,omitempty"`           // auto|ipsec-vpn|openvpn-client|openvpn-server|openvpn-vpn|pptp-client|l2tp-server|pptp-server|sdwan-hub-spoke-tunnel|sdwan-mesh-tunnel|uid-server|wireguard-server|wireguard-client
 	VrrpIPSubnetGw1                               string                          `json:"vrrp_ip_subnet_gw1,omitempty"` // ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/([1-9]|[1-2][0-9]|30)$
 	VrrpIPSubnetGw2                               string                          `json:"vrrp_ip_subnet_gw2,omitempty"` // ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/([1-9]|[1-2][0-9]|30)$
 	VrrpVrid                                      int                             `json:"vrrp_vrid,omitempty"`          // [1-9]|[1-9][0-9]
@@ -334,6 +338,27 @@ func (dst *Network) UnmarshalJSON(b []byte) error {
 	dst.WANSmartqUpRate = int(aux.WANSmartqUpRate)
 	dst.WANVLAN = int(aux.WANVLAN)
 	dst.WireguardClientPeerPort = int(aux.WireguardClientPeerPort)
+
+	return nil
+}
+
+type NetworkIGMPQuerierSwitches struct {
+	QuerierAddress string `json:"querier_address"`      // ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^$
+	SwitchMAC      string `json:"switch_mac,omitempty"` // ^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$
+}
+
+func (dst *NetworkIGMPQuerierSwitches) UnmarshalJSON(b []byte) error {
+	type Alias NetworkIGMPQuerierSwitches
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(dst),
+	}
+
+	err := json.Unmarshal(b, &aux)
+	if err != nil {
+		return fmt.Errorf("unable to unmarshal alias: %w", err)
+	}
 
 	return nil
 }
