@@ -5,6 +5,45 @@ import (
 	"fmt"
 )
 
+type FirewallDestination         struct {
+		IPGroupID          string   `json:"ip_group_id"`
+		Ips                []string `json:"ips"`
+		MatchOppositeIps   bool     `json:"match_opposite_ips"`
+		MatchOppositePorts bool     `json:"match_opposite_ports"`
+		MatchingTarget     string   `json:"matching_target"`
+		NetworkIDs         [] string   `json:"network_ids"`
+		Port               string   `json:"port"`
+		PortGroupID        string   `json:"port_group_id"`
+		PortMatchingType   string   `json:"port_matching_type"`
+		Regions            []string `json:"regions"`
+		ZoneID             string   `json:"zone_id"`
+	} 
+
+type FirewallSource struct {
+		ClientMacs            []string `json:"client_macs"`
+		Ips                   []string `json:"ips"`
+		MatchMac              bool     `json:"match_mac"`
+		MatchOppositeIps      bool     `json:"match_opposite_ips"`
+		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
+		MatchOppositePorts    bool     `json:"match_opposite_ports"`
+		MatchingTarget        string   `json:"matching_target"`
+		MatchingTargetType    string   `json:"matching_target_type"`
+		NetworkIDs            []string `json:"network_ids"`
+		Port                  string   `json:"port"`
+		PortMatchingType      string   `json:"port_matching_type"`
+		ZoneID                string   `json:"zone_id"`
+	}
+
+type FirewallSchedule              struct {
+		Mode         string        `json:"mode"`
+		DateStart     string  `json:"date_start"`
+		DateEnd     string  `json:"date_end"`
+		RepeatOnDays []string `json:"repeat_on_days"`
+		TimeAllDay   bool          `json:"time_all_day"`
+		TimeRangeStart string      `json:"time_range_start"`
+		TimeRangeEnd string      `json:"time_range_end"`
+	}
+
 type FirewallPolicy struct {
 	ID string `json:"_id,omitempty"`
 
@@ -18,19 +57,7 @@ type FirewallPolicy struct {
 	ConnectionStates    []string `json:"connection_states"`
 	CreateAllowRespond  bool     `json:"create_allow_respond"`
 	Description         string   `json:"description"`
-	Destination         struct {
-		IPGroupID          string   `json:"ip_group_id"`
-		Ips                []string `json:"ips"`
-		MatchOppositeIps   bool     `json:"match_opposite_ips"`
-		MatchOppositePorts bool     `json:"match_opposite_ports"`
-		MatchingTarget     string   `json:"matching_target"`
-		NetworkIDs         [] string   `json:"network_ids"`
-		Port               string   `json:"port"`
-		PortGroupID        string   `json:"port_group_id"`
-		PortMatchingType   string   `json:"port_matching_type"`
-		Regions            []string `json:"regions"`
-		ZoneID             string   `json:"zone_id"`
-	} `json:"destination"`
+	Destination FirewallDestination `json:"destination"`
 	Enabled               bool   `json:"enabled"`
 	IcmpTypename          string `json:"icmp_typename"`
 	IcmpV6Typename        string `json:"icmp_v6_typename"`
@@ -45,29 +72,8 @@ type FirewallPolicy struct {
 	OriginType            string `json:"origin_type"`
 	Predefined            bool   `json:"predefined"`
 	Protocol              string `json:"protocol"`
-	Schedule              struct {
-		Mode         string        `json:"mode"`
-		DateStart     string  `json:"date_start"`
-		DateEnd     string  `json:"date_end"`
-		RepeatOnDays []string `json:"repeat_on_days"`
-		TimeAllDay   bool          `json:"time_all_day"`
-		TimeRangeStart string      `json:"time_range_start"`
-		TimeRangeEnd string      `json:"time_range_end"`
-	} `json:"schedule"`
-	Source struct {
-		ClientMacs            []string `json:"client_macs"`
-		Ips                   []string `json:"ips"`
-		MatchMac              bool     `json:"match_mac"`
-		MatchOppositeIps      bool     `json:"match_opposite_ips"`
-		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
-		MatchOppositePorts    bool     `json:"match_opposite_ports"`
-		MatchingTarget        string   `json:"matching_target"`
-		MatchingTargetType    string   `json:"matching_target_type"`
-		NetworkIDs            []string `json:"network_ids"`
-		Port                  string   `json:"port"`
-		PortMatchingType      string   `json:"port_matching_type"`
-		ZoneID                string   `json:"zone_id"`
-	} `json:"source"`
+	Schedule              FirewallSchedule `json:"schedule"`
+	Source FirewallSource `json:"source"`
 
 	// Role string `json:"role"`
 }
