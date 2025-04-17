@@ -11,6 +11,7 @@ type FirewallDestination         struct {
 		MatchOppositeIps   bool     `json:"match_opposite_ips"`
 		MatchOppositePorts bool     `json:"match_opposite_ports"`
 		MatchingTarget     string   `json:"matching_target"`
+		MatchingTargetType    string   `json:"matching_target_type"`
 		NetworkIDs         [] string   `json:"network_ids"`
 		Port               string   `json:"port"`
 		PortGroupID        string   `json:"port_group_id"`
