@@ -112,7 +112,7 @@ func (c *Client) DeleteFirewallPolicy(ctx context.Context, site, id string) erro
         return nil
 }
 
-func (c *Client) CreaateFirewallPolicy(ctx context.Context, site string, d *FirewallPolicy) (*FirewallPolicy, error) {
+func (c *Client) CreateFirewallPolicy(ctx context.Context, site string, d *FirewallPolicy) (*FirewallPolicy, error) {
         var respBody FirewallPolicy
 
         err := c.do_versioned(ctx, "V2", "POST", fmt.Sprintf("site/%s/firewall-policies", site), d, &respBody)
