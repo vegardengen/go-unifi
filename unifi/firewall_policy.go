@@ -7,8 +7,8 @@ import (
 
 type FirewallDestination         struct {
 		IPGroupID          string   `json:"ip_group_id"`
-		Ips                []string `json:"ips"`
-		MatchOppositeIps   bool     `json:"match_opposite_ips"`
+		IPs                []string `json:"ips"`
+		MatchOppositeIPs   bool     `json:"match_opposite_ips"`
 		MatchOppositePorts bool     `json:"match_opposite_ports"`
 		MatchingTarget     string   `json:"matching_target"`
 		MatchingTargetType    string   `json:"matching_target_type"`
@@ -22,9 +22,9 @@ type FirewallDestination         struct {
 
 type FirewallSource struct {
 		ClientMacs            []string `json:"client_macs"`
-		Ips                   []string `json:"ips"`
+		IPs                   []string `json:"ips"`
 		MatchMac              bool     `json:"match_mac"`
-		MatchOppositeIps      bool     `json:"match_opposite_ips"`
+		MatchOppositeIPs      bool     `json:"match_opposite_ips"`
 		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
 		MatchOppositePorts    bool     `json:"match_opposite_ports"`
 		MatchingTarget        string   `json:"matching_target"`
@@ -60,8 +60,8 @@ type FirewallPolicy struct {
 	Description         string   `json:"description"`
 	Destination FirewallDestination `json:"destination"`
 	Enabled               bool   `json:"enabled"`
-	IcmpTypename          string `json:"icmp_typename"`
-	IcmpV6Typename        string `json:"icmp_v6_typename"`
+	ICMPTypename          string `json:"icmp_typename"`
+	ICMPV6Typename        string `json:"icmp_v6_typename"`
 	Index                 int64  `json:"index"`
 	IPVersion             string `json:"ip_version"`
 	Logging               bool   `json:"logging"`
