@@ -28,7 +28,7 @@ type FirewallSource struct {
 		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
 		MatchOppositePorts    bool     `json:"match_opposite_ports"`
 		MatchingTarget        string   `json:"matching_target"`
-		MatchingTargetType    string   `json:"matching_target_type"`
+		MatchingTargetType    string   `json:"matching_target_type,omitempty"`
 		NetworkIDs            []string `json:"network_ids,omitempty"`
 		Port                  string   `json:"port"`
 		PortMatchingType      string   `json:"port_matching_type"`
