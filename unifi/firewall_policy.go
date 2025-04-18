@@ -27,12 +27,12 @@ type FirewallSource struct {
 		MatchOppositeIPs      bool     `json:"match_opposite_ips"`
 		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
 		MatchOppositePorts    bool     `json:"match_opposite_ports"`
-		MatchingTarget        string   `json:"matching_target"`
+		MatchingTarget        string   `json:"matching_target,omitempty"`
 		MatchingTargetType    string   `json:"matching_target_type,omitempty"`
 		NetworkIDs            []string `json:"network_ids,omitempty"`
-		Port                  string   `json:"port"`
-		PortMatchingType      string   `json:"port_matching_type"`
-		ZoneID                string   `json:"zone_id"`
+		Port                  string   `json:"port,omitempty"`
+		PortMatchingType      string   `json:"port_matching_type,omitempty"`
+		ZoneID                string   `json:"zone_id,omitempty"`
 	}
 
 type FirewallSchedule              struct {
