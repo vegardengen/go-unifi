@@ -13,7 +13,7 @@ type FirewallDestination         struct {
 		MatchingTarget     string   `json:"matching_target"`
 		MatchingTargetType    string   `json:"matching_target_type"`
 		NetworkIDs         [] string   `json:"network_ids,omitempty"`
-		Port               string   `json:"port"`
+		Port               string   `json:"port,omitempty"`
 		PortGroupID        string   `json:"port_group_id"`
 		PortMatchingType   string   `json:"port_matching_type"`
 		Regions            []string `json:"regions,omitempty"`
