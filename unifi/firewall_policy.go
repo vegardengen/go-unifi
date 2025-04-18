@@ -7,7 +7,7 @@ import (
 
 type FirewallDestination         struct {
 		IPGroupID          string   `json:"ip_group_id"`
-		IPs                []string `json:"ips"`
+		IPs                []string `json:"ips,omitempty"`
 		MatchOppositeIPs   bool     `json:"match_opposite_ips"`
 		MatchOppositePorts bool     `json:"match_opposite_ports"`
 		MatchingTarget     string   `json:"matching_target"`
