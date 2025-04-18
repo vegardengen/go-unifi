@@ -37,12 +37,12 @@ type FirewallSource struct {
 
 type FirewallSchedule              struct {
 		Mode         string        `json:"mode"`
-		DateStart     string  `json:"date_start"`
-		DateEnd     string  `json:"date_end"`
+		DateStart     string  `json:"date_start,omitempty"`
+		DateEnd     string  `json:"date_end,omitempty"`
 		RepeatOnDays []string `json:"repeat_on_days"`
 		TimeAllDay   bool          `json:"time_all_day"`
-		TimeRangeStart string      `json:"time_range_start"`
-		TimeRangeEnd string      `json:"time_range_end"`
+		TimeRangeStart string      `json:"time_range_start,omitempty"`
+		TimeRangeEnd string      `json:"time_range_end,omitempty"`
 	}
 
 type FirewallPolicy struct {
@@ -66,11 +66,11 @@ type FirewallPolicy struct {
 	IPVersion             string `json:"ip_version"`
 	Logging               bool   `json:"logging"`
 	MatchIPSec            bool   `json:"match_ip_sec"`
-	MatchIPSecType        string `json:"match_ip_sec_type"`
+	MatchIPSecType        string `json:"match_ip_sec_type,omitempty"`
 	MatchOppositeProtocol bool   `json:"match_opposite_protocol"`
 	Name                  string `json:"name"`
-	OriginID              string `json:"origin_id"`
-	OriginType            string `json:"origin_type"`
+	OriginID              string `json:"origin_id,omitempty"`
+	OriginType            string `json:"origin_type,omitempty"`
 	Predefined            bool   `json:"predefined"`
 	Protocol              string `json:"protocol"`
 	Schedule              FirewallSchedule `json:"schedule"`
