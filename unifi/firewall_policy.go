@@ -12,11 +12,11 @@ type FirewallDestination         struct {
 		MatchOppositePorts bool     `json:"match_opposite_ports"`
 		MatchingTarget     string   `json:"matching_target"`
 		MatchingTargetType    string   `json:"matching_target_type"`
-		NetworkIDs         [] string   `json:"network_ids"`
+		NetworkIDs         [] string   `json:"network_ids,omitempty"`
 		Port               string   `json:"port"`
 		PortGroupID        string   `json:"port_group_id"`
 		PortMatchingType   string   `json:"port_matching_type"`
-		Regions            []string `json:"regions"`
+		Regions            []string `json:"regions,omitempty"`
 		ZoneID             string   `json:"zone_id"`
 	} 
 
