@@ -21,8 +21,8 @@ type FirewallDestination         struct {
 	} 
 
 type FirewallSource struct {
-		ClientMacs            []string `json:"client_macs"`
-		IPs                   []string `json:"ips"`
+		ClientMacs            []string `json:"client_macs,omitempty"`
+		IPs                   []string `json:"ips,omitempty"`
 		MatchMac              bool     `json:"match_mac"`
 		MatchOppositeIPs      bool     `json:"match_opposite_ips"`
 		MatchOppositeNetworks bool     `json:"match_opposite_networks"`
