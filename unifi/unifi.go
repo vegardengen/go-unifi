@@ -255,7 +255,7 @@ func (c *Client) do_versioned(ctx context.Context, version, method, relativeURL 
 		c.csrf = resp.Header.Get("X-Csrf-Token")
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		errBody := struct {
 			Meta meta `json:"meta"`
 			Data []struct {
